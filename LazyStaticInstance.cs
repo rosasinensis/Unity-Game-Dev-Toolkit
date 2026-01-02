@@ -7,8 +7,10 @@ namespace MKUtil
     public class LazyStaticInstance<T> : MonoBehaviour where T : MonoBehaviour
     {
 
-        // Primarily used for Databases.
-        // Must manually Initialize(), because load order usually matters.
+        // Primarily used for Databases and making sure they're
+        // loaded in the correct order.
+
+        // These instances must manually be Initialized (because load order matters).
 
         public bool IsInitialized { get; private set; }
 
@@ -28,8 +30,7 @@ namespace MKUtil
         public static void StaticInstanceInitialize()
         {
 
-            // Make sure the Instance exists first.
-            // Don't necessarily run.
+            // Make sure the Instance exists.
 
             if (_instance != null)
             {
