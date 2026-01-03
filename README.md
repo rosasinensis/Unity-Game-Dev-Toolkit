@@ -14,7 +14,9 @@ A private collection of scripts I've written for my games that I think are helpf
 <li><b>Calc.cs</b>
 <ul>Some QoL 3D math extensions for Vector3s and Transforms, like <b>Dot</b>, <b>DistanceTo</b>, <b>DirectionTo</b>, <b>IsWithinRange</b>, and Quaternion <b>GetLookAtRotation</b>. Also includes <b>IsFacing</b> which helps with determining thresholds to dot products.</li></ul>
 <li><b>TextUtil.cs</b>
-<ul>More (hopefully) performant string handling using a new class called <b>TextBuilder</b> which uses StringBuilder. Also includes a static <b>To</b> class for other string manipulating functions like Capitalization, Lower(case), Removing Spaces. Used for things like "Red Apple" and turning it into ids like "redapple".</li></ul></ul>
+<ul>More (hopefully) performant string handling using a new class called <b>TextBuilder</b> which uses StringBuilder. Also includes a static <b>To</b> class for other string manipulating functions like Capitalization, Lower(case), Removing Spaces. Used for things like "Red Apple" and turning it into ids like "redapple".</li></ul>
+<li><b>Ticker.cs</b>
+<ul>Subscribe or unsubscribe events that require invocation into one manager class, which batches them by rate.</li></ul></ul>
 <h2>Folders</h2>
   <h3>SerializableData Folder</h3>
   <ul>Data that can be used in JSON files. Includes <b>SerializableQuaternion</b>, <b>SerializableVector3</b>, and <b>RBG</b>.
