@@ -35,72 +35,76 @@ namespace MKUtil
 
         public class WeightedObject<T>
         {
-            public WeightedItem<T>[] items;
-            public int Count => items.Length;
+            private List<WeightedItem<T>> _items;
+            public readonly ReadOnlyCollection<WeightedItem<T>> items;
+            public float TotalWeight { get; private set; }
 
+            public WeightedObject(params (T item, float weight)[] tupleItems)
+            {
+                _items = new List<WeightedItem<T>>();
+                for (int i = 0; i < tupleItems.Length; i++)
+                {
+                    var tuple = tupleItems[i];
+                    _items.Add(new WeightedItem<T>(tuple.item, tuple.weight));
+                    TotalWeight += tuple.weight;
+                }
+            }
             public WeightedObject(params WeightedItem<T>[] newItems)
             {
-                items = newItems;
+                _items = new List<WeightedItem<T>>();
+                for (int i = 0; i < newItems.Length; i++)
+                {
+                    var wItem = newItems[i];
+                    _items.Add(wItem);
+                    TotalWeight += wItem.weight;
+                }
             }
 
-            public float GetTotalWeight()
+            public void Add(params WeightedItem<T>[] newItems)
             {
-                float total = 0f;
-                for (int i = 0; i < items.Length; i++)
+                if (newItems == null || newItems.Length == 0)
                 {
-                    total += items[i].weight;
+                    return;
                 }
-                return total;
+                for (int i = 0; i < newItems.Length; i++)
+                {
+                    var wItem = newItems[i];
+                    _items.Add(wItem);
+                    TotalWeight += wItem.weight;
+                }
             }
+            public void Add(params (T item, float weight)[] tupleItems)
+            {
+                if (tupleItems == null || tupleItems.Length == 0)
+                {
+                    return;
+                }
+                for (int i = 0; i < tupleItems.Length; i++)
+                {
+                    var tuple = tupleItems[i];
+                    _items.Add(new WeightedItem<T>(tuple.item, tuple.weight));
+                    TotalWeight += tuple.weight;
+                }
+            }
+
         }
 
         /// Picking logic
-
-        public static T Weighted<T>(params (T item, float weight)[] itemTuples)
-        {
-
-            if (itemTuples == null || itemTuples.Length == 0)
-            {
-                return default;
-            }
-
-            float totalWeight = 0;
-
-            for (int i = 0; i < itemTuples.Length; i++)
-            {
-                totalWeight += itemTuples[i].weight;
-            }
-
-            float roll = (float)rng.NextDouble() * totalWeight;
-            float cursor = 0;
-
-            for (int i = 0; i < itemTuples.Length; i++)
-            {
-                var tuple = itemTuples[i];
-                cursor += tuple.weight;
-                if (roll <= cursor)
-                {
-                    return tuple.item;
-                }
-            }
-            return itemTuples[itemTuples.Length - 1].item;
-        }
-
-
         public static T Weighted<T>(WeightedObject<T> weightedObj)
         {
 
-            if (weightedObj == null || weightedObj.Count == 0)
+            if (weightedObj?.items == null || weightedObj.items.Count == 0)
             {
                 return default;
             }
+            float totalWeight = weightedObj.TotalWeight;
 
-            float totalWeight = weightedObj.GetTotalWeight();
             // Pick a point between 0 and total weight.
             float roll = (float)rng.NextDouble() * totalWeight;
-
             float cursor = 0;
-            for (int i = 0; i < weightedObj.Count; i++)
+
+            var count = weightedObj.items.Count;
+            for (int i = 0; i < count; i++)
             {
                 var item = weightedObj.items[i];
                 cursor += item.weight;
@@ -109,8 +113,18 @@ namespace MKUtil
                     return item.item;
                 }
             }
-            return weightedObj.items[weightedObj.Count - 1].item;
+            return weightedObj.items[count - 1].item;
 
+        }
+        public static T Weighted<T>(params (T item, float weight)[] itemTuples)
+        {
+            if (itemTuples == null || itemTuples.Length == 0)
+            {
+                return default;
+            }
+
+            var weightedObject = new WeightedObject<T>(itemTuples);
+            return Weighted(weightedObject);
         }
 
         /// Shuffle logic
