@@ -16,10 +16,11 @@ A private collection of scripts I've written for my games that I think are helpf
 <li><b>TextUtil.cs</b>
 <ul>More (hopefully) performant string handling using a new class called <b>TextBuilder</b> which uses StringBuilder. Also includes a static <b>To</b> class for other string manipulating functions like Capitalization, Lower(case), Removing Spaces. Used for things like "Red Apple" and turning it into ids like "redapple".</li></ul>
 <li><b>Ticker.cs</b>
-<ul>Subscribe or unsubscribe events that require invocation into one manager class, which batches them by rate.</li></ul>
+<ul>Subscribe or unsubscribe events that require invocation into one manager class, which batches them by rate. Example: batches all callbacks which asks to fire at 1.0f.</li></ul>
 <li><b>MatchUtil.cs</b>
-<ul>Recursively checks ILists to see if another IList item meets its criteria, using <b>MatchUtil.CanSatisfyAll</b>. Used for things like making sure recipe ingredients meet some rule (correct category, specific item, with specific tags, specific quality) which has to be met by the player-selected ingredients.</li></ul></ul>
+<ul>Recursively checks ILists to see if another IList's item meets its criteria using <b>MatchUtil.CanSatisfyAll</b>. Used for things like making sure recipe ingredients meet some rule (correct category, specific item, with specific tags, specific quality) which has to be met by player-selected ingredients.</li></ul></ul>
 <h2>Folders</h2>
   <h3>SerializableData Folder</h3>
-  <ul>Data that can be used in JSON files. Includes <b>SerializableQuaternion</b>, <b>SerializableVector3</b>, and <b>RBG</b>.
-  </ul>
+  <ul>Data that can be used in JSON files. Includes <b>SerializableQuaternion</b>, <b>SerializableVector3</b>, and <b>RBG</b>.</ul>
+  <h3>StateMachine Folder</h3>
+  <ul>Extremely simple and expandable <b>StateMachine</b> system that takes <b>IStates</b> and a <b>StateController</b> which notably <b>keeps a library of all its States by some string id</b>.</ul>
