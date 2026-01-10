@@ -7,10 +7,8 @@ namespace MKUtil
 {
     public static class Pick
     {
-        // <summary>
         // Pick or shuffle from items. Handles weighted stuff, too.
         // For loot tables, weighted spawning, randomization...
-        // </summary>
 
         // Example: 
         // var rareFish = Pick.Weighted(fishList);
@@ -57,10 +55,42 @@ namespace MKUtil
         }
 
         /// Picking logic
+
+        public static T Weighted<T>(params (T item, float weight)[] itemTuples)
+        {
+
+            if (itemTuples == null || itemTuples.Length == 0)
+            {
+                return default;
+            }
+
+            float totalWeight = 0;
+
+            for (int i = 0; i < itemTuples.Length; i++)
+            {
+                totalWeight += itemTuples[i].weight;
+            }
+
+            float roll = (float)rng.NextDouble() * totalWeight;
+            float cursor = 0;
+
+            for (int i = 0; i < itemTuples.Length; i++)
+            {
+                var tuple = itemTuples[i];
+                cursor += tuple.weight;
+                if (roll <= cursor)
+                {
+                    return tuple.item;
+                }
+            }
+            return itemTuples[itemTuples.Length - 1].item;
+        }
+
+
         public static T Weighted<T>(WeightedObject<T> weightedObj)
         {
 
-            if (weightedObj.Count == 0)
+            if (weightedObj == null || weightedObj.Count == 0)
             {
                 return default;
             }
